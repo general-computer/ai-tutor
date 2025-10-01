@@ -1,16 +1,41 @@
-const TutorController = require('../../src/controllers/tutor.controller');
-const conversationManager = require('../../src/utils/conversation');
-const agoraService = require('../../src/services/agora.service');
-const llmService = require('../../src/services/llm.service');
-const ttsService = require('../../src/services/tts.service');
-const avatarService = require('../../src/services/avatar.service');
-
 // Mock dependencies
-jest.mock('../../src/utils/conversation');
-jest.mock('../../src/services/agora.service');
-jest.mock('../../src/services/llm.service');
-jest.mock('../../src/services/tts.service');
-jest.mock('../../src/services/avatar.service');
+jest.mock('../../src/utils/conversation', () => ({
+  conversationManager: {
+    createSession: jest.fn(),
+    getSession: jest.fn(),
+    addMessage: jest.fn(),
+    endSession: jest.fn()
+  }
+}));
+jest.mock('../../src/services/agora.service', () => ({
+  agoraService: {
+    generateRtcToken: jest.fn()
+  }
+}));
+jest.mock('../../src/services/llm.service', () => ({
+  llmService: {
+    generateResponse: jest.fn()
+  }
+}));
+jest.mock('../../src/services/tts.service', () => ({
+  ttsService: {
+    synthesizeSpeech: jest.fn()
+  }
+}));
+jest.mock('../../src/services/avatar.service', () => ({
+  avatarService: {
+    generateVideo: jest.fn(),
+    pollForVideo: jest.fn()
+  }
+}));
+jest.mock('../../src/utils/logger');
+
+const TutorController = require('../../src/controllers/tutor.controller');
+const { conversationManager } = require('../../src/utils/conversation');
+const { agoraService } = require('../../src/services/agora.service');
+const { llmService } = require('../../src/services/llm.service');
+const { ttsService } = require('../../src/services/tts.service');
+const { avatarService } = require('../../src/services/avatar.service');
 
 describe('TutorController', () => {
   let req, res, next;

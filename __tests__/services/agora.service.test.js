@@ -1,8 +1,9 @@
-const AgoraService = require('../../src/services/agora.service');
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
+const { AgoraService } = require('../../src/services/agora.service');
 
 // Mock dependencies
 jest.mock('agora-access-token');
+jest.mock('../../src/utils/logger');
 
 describe('AgoraService', () => {
   let agoraService;
@@ -26,14 +27,14 @@ describe('AgoraService', () => {
   
   describe('generateRtcToken', () => {
     it('should generate a token with the provided parameters', () => {
-      const token = agoraService.generateRtcToken('test-channel', 123, RtcRole.PUBLISHER);
+      const token = agoraService.generateRtcToken('test-channel', '123');
       
       expect(token).toBe('mock-token');
       expect(RtcTokenBuilder.buildTokenWithUid).toHaveBeenCalledWith(
         'test-app-id',
         'test-certificate',
         'test-channel',
-        123,
+        '123',
         RtcRole.PUBLISHER,
         expect.any(Number)
       );
@@ -54,8 +55,7 @@ describe('AgoraService', () => {
     
     it('should throw an error if Agora credentials are not configured', () => {
       // Remove credentials from config
-      agoraService.config.agora.appId = '';
-      agoraService.config.agora.appCertificate = '';
+      agoraService.config.agora = {};
       
       expect(() => {
         agoraService.generateRtcToken('test-channel');

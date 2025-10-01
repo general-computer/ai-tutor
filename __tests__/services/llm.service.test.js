@@ -1,8 +1,20 @@
-const LLMService = require('../../src/services/llm.service');
-const { Anthropic } = require('@anthropic-ai/sdk');
+const Anthropic = require('@anthropic-ai/sdk');
+const { LLMService } = require('../../src/services/llm.service');
+const { getSATTutorPrompt } = require('../../src/utils/prompts');
 
 // Mock dependencies
 jest.mock('@anthropic-ai/sdk');
+jest.mock('../../src/config', () => ({
+  llm: {
+    anthropicKey: 'test-key',
+    model: 'claude-3-opus-20240229',
+    maxTokens: 1000
+  }
+}));
+jest.mock('../../src/utils/prompts', () => ({
+  getSATTutorPrompt: jest.fn().mockReturnValue('You are an SAT tutor')
+}));
+jest.mock('../../src/utils/logger');
 
 describe('LLMService', () => {
   let llmService;
@@ -36,6 +48,7 @@ describe('LLMService', () => {
       
       expect(result).toBe('Mock AI response');
       expect(llmService.client.messages.create).toHaveBeenCalled();
+      expect(getSATTutorPrompt).toHaveBeenCalledWith(subject);
     });
     
     it('should handle API errors gracefully', async () => {
@@ -46,7 +59,7 @@ describe('LLMService', () => {
       llmService.client.messages.create.mockRejectedValue(new Error('API error'));
       
       await expect(llmService.generateResponse(userMessage, conversationHistory, subject))
-        .rejects.toThrow('API error');
+        .rejects.toThrow('Failed to generate response from Anthropic: API error');
     });
   });
   
@@ -61,16 +74,17 @@ describe('LLMService', () => {
       
       await llmService.generateAnthropicResponse(systemPrompt, userMessage, conversationHistory);
       
-      expect(llmService.client.messages.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          system: systemPrompt,
-          messages: expect.arrayContaining([
-            { role: 'user', content: 'Hello' },
-            { role: 'assistant', content: 'Hi there!' },
-            { role: 'user', content: 'Help me with this problem' }
-          ])
-        })
-      );
+      expect(llmService.client.messages.create).toHaveBeenCalledWith({
+        model: 'claude-3-opus-20240229',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [
+          { role: 'user', content: 'Hello' },
+          { role: 'assistant', content: 'Hi there!' },
+          { role: 'user', content: userMessage }
+        ],
+        temperature: 0.7
+      });
     });
   });
 });

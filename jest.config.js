@@ -8,5 +8,6 @@ module.exports = {
   coverageDirectory: 'coverage',
   testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
   testPathIgnorePatterns: ['/node_modules/'],
-  verbose: true
+  verbose: true,
+  setupFilesAfterEnv: ['./jest.setup.js']
 };
