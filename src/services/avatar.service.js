@@ -95,6 +95,8 @@ class AvatarService {
         if (error.response && error.response.status >= 400) {
           throw new Error(`D-ID API error: ${error.response.status} ${error.response.statusText}`);
         }
+        // Re-throw the error to prevent falling through to the timeout error
+        throw error;
       }
     }
     

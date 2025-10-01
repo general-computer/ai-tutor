@@ -154,6 +154,9 @@ describe('Avatar Service', () => {
       await expect(avatarService.pollForVideo(talkId, 1, 10)).rejects.toThrow(
         `D-ID video generation failed: ${errorMessage}`
       );
+      
+      // Verify logger was called with the error message
+      expect(logger.error).toHaveBeenCalledWith(`D-ID video generation failed: ${errorMessage}`);
     });
 
     it('should throw error after max attempts', async () => {
