@@ -27,6 +27,10 @@ describe('ConversationManager', () => {
   });
   
   afterEach(() => {
+    // Clean up the interval to prevent Jest from detecting open handles
+    if (conversationManager) {
+      conversationManager.clearInterval();
+    }
     jest.restoreAllMocks();
   });
   
