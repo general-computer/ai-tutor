@@ -33,14 +33,14 @@ echo -e "\n"
 echo "4. Process Message"
 curl -s -X POST $BASE_URL/api/tutor/process \
   -H "Content-Type: application/json" \
-  -d "{\"sessionId\": \"$SESSION_ID\", \"message\": \"What is the quadratic formula?\"}" | jq
+  -d "{\"sessionId\": \"$SESSION_ID\", \"message\": \"What is the quadratic formula?\"}" | jq 'del(.audioData, .videoData)'
 echo -e "\n"
 
 # 5. Process another message
 echo "5. Process Follow-up Message"
 curl -s -X POST $BASE_URL/api/tutor/process \
   -H "Content-Type: application/json" \
-  -d "{\"sessionId\": \"$SESSION_ID\", \"message\": \"Can you give me an example?\"}" | jq
+  -d "{\"sessionId\": \"$SESSION_ID\", \"message\": \"Can you give me an example?\"}" | jq 'del(.audioData, .videoData)'
 echo -e "\n"
 
 # 6. End session
