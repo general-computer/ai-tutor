@@ -86,7 +86,9 @@ class AvatarService {
           logger.info(`D-ID video ready: ${talkId}`);
           return response.data.result_url;
         } else if (status === 'error') {
-          throw new Error(`D-ID video generation failed: ${response.data.error || 'Unknown error'}`);
+          const errorMsg = response.data.error || 'Unknown error';
+          logger.error(`D-ID video generation failed: ${errorMsg}`);
+          throw new Error(`D-ID video generation failed: ${errorMsg}`);
         }
       } catch (error) {
         logger.error('Error polling for D-ID video:', error);
