@@ -1,0 +1,130 @@
+# SAT Tutor with Agora - Project Structure
+
+## Directory Structure
+
+```
+sat-tutor-agora/
+├── src/
+│   ├── config/
+│   │   └── index.js                 # Centralized configuration
+│   ├── services/
+│   │   ├── agora.service.js         # Agora RTC integration
+│   │   ├── llm.service.js           # LLM API (OpenAI/Anthropic)
+│   │   ├── tts.service.js           # Text-to-Speech (ElevenLabs)
+│   │   └── avatar.service.js        # Avatar generation (D-ID/HeyGen)
+│   ├── routes/
+│   │   ├── tutor.routes.js          # Main tutoring endpoints
+│   │   └── health.routes.js         # Health check endpoint
+│   ├── controllers/
+│   │   └── tutor.controller.js      # Business logic for tutoring
+│   ├── middleware/
+│   │   ├── errorHandler.js          # Global error handling
+│   │   └── logger.js                # Request logging
+│   ├── utils/
+│   │   ├── conversation.js          # Conversation state management
+│   │   ├── prompts.js               # SAT tutor prompts
+│   │   └── logger.js                # Winston logger setup
+│   └── server.js                    # Main application entry
+├── tests/
+│   ├── unit/
+│   │   └── services/
+│   └── integration/
+├── .env.example                     # Environment variables template
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+### README.md
+```markdown
+# SAT Tutor with Agora Integration
+
+AI-powered SAT tutoring with real-time video avatar using Agora RTC.
+
+## Quick Start
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your API keys
+   ```
+
+3. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+## API Endpoints
+
+### Generate Token
+```
+POST /api/tutor/token
+Body: { "channelName": "string", "uid": number }
+```
+
+### Start Session
+```
+POST /api/tutor/session/start
+Body: { "userId": "string", "subject": "math|reading|writing|general" }
+```
+
+### Process Message
+```
+POST /api/tutor/process
+Body: { "sessionId": "string", "message": "string" }
+```
+
+### End Session
+```
+POST /api/tutor/session/end
+Body: { "sessionId": "string" }
+```
+
+## Development Roadmap
+
+### Phase 1: Core Pipeline (Week 1)
+- [ ] Agora integration
+- [ ] LLM integration
+- [ ] TTS integration
+- [ ] Basic conversation flow
+
+### Phase 2: Avatar (Week 2)
+- [ ] Research avatar providers
+- [ ] Implement avatar generation
+- [ ] Optimize latency
+
+### Phase 3: Polish (Week 3)
+- [ ] Error handling
+- [ ] Logging improvements
+- [ ] Performance optimization
+- [ ] Deploy to staging
+
+## Testing
+
+Test individual services:
+```bash
+# Test LLM service
+node -e "require('./src/services/llm.service').generateResponse('What is 2+2?', [], 'math').then(console.log)"
+
+# Test TTS service
+node -e "require('./src/services/tts.service').synthesizeSpeech('Hello world').then(console.log)"
+```
+
+## Notes
+
+- Avatar service implementation depends on chosen provider (D-ID/HeyGen)
+- Conversation history kept in memory (use Redis for production)
+- Audio/video stored as data URLs for MVP (use S3/CDN for production)
+```
+
+## Next Steps
+
+1. **Run** `npm install` to install dependencies
+2. **Copy** `.env.example` to `.env` and fill in your API keys
+3. **Start** with testing individual services before integrating
+4. **Build** incrementally - get STT → LLM working first, then add TTS, then avatar
