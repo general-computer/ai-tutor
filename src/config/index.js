@@ -10,11 +10,9 @@ module.exports = {
   },
   
   llm: {
-    provider: 'anthropic', // or 'openai'
-    openaiKey: process.env.OPENAI_API_KEY,
     anthropicKey: process.env.ANTHROPIC_API_KEY,
-    model: 'claude-sonnet-4-5',
-    maxTokens: 500,
+    model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022',
+    maxTokens: parseInt(process.env.ANTHROPIC_MAX_TOKENS) || 500,
   },
   
   tts: {
