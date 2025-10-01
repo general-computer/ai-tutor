@@ -10,10 +10,10 @@ module.exports = {
   },
   
   llm: {
-    provider: 'openai', // or 'anthropic'
+    provider: 'anthropic', // or 'openai'
     openaiKey: process.env.OPENAI_API_KEY,
     anthropicKey: process.env.ANTHROPIC_API_KEY,
-    model: 'gpt-4-turbo-preview',
+    model: 'claude-sonnet-4-5',
     maxTokens: 500,
   },
   
