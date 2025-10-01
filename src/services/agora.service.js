@@ -3,9 +3,13 @@ const config = require('../config');
 const logger = require('../utils/logger');
 
 class AgoraService {
+  constructor() {
+    this.config = config;
+  }
+  
   generateRtcToken(channelName, uid = 0, role = RtcRole.PUBLISHER) {
-    const appId = config.agora.appId;
-    const appCertificate = config.agora.appCertificate;
+    const appId = this.config.agora.appId;
+    const appCertificate = this.config.agora.appCertificate;
     
     if (!appId || !appCertificate) {
       throw new Error('Agora credentials not configured');
@@ -31,4 +35,7 @@ class AgoraService {
   }
 }
 
-module.exports = new AgoraService();
+module.exports = {
+  AgoraService,
+  default: new AgoraService()
+};

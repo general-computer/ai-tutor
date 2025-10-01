@@ -1,8 +1,8 @@
-const agoraService = require('../services/agora.service');
-const llmService = require('../services/llm.service');
+const agoraService = require('../services/agora.service').default;
+const llmService = require('../services/llm.service').default;
 const ttsService = require('../services/tts.service');
 const avatarService = require('../services/avatar.service');
-const conversationManager = require('../utils/conversation');
+const conversationManager = require('../utils/conversation').default;
 const logger = require('../utils/logger');
 
 class TutorController {
@@ -16,7 +16,7 @@ class TutorController {
       
       const token = agoraService.generateRtcToken(channelName, uid);
       
-      res.json({ token, channelName, uid });
+      res.json({ token });
     } catch (error) {
       next(error);
     }
@@ -30,10 +30,7 @@ class TutorController {
       
       logger.info(`Started tutoring session: ${sessionId}`);
       
-      res.json({ 
-        sessionId, 
-        message: 'Session started successfully' 
-      });
+      res.json({ sessionId });
     } catch (error) {
       next(error);
     }

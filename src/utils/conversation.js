@@ -81,4 +81,7 @@ class ConversationManager {
   }
 }
 
-module.exports = new ConversationManager();
+module.exports = {
+  ConversationManager,
+  default: new ConversationManager()
+};
