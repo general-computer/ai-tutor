@@ -24,6 +24,9 @@ module.exports = {
   avatar: {
     provider: 'did', // or 'heygen'
     apiKey: process.env.D_ID_API_KEY,
+    sourceUrl: process.env.D_ID_SOURCE_URL || 'https://create-images-results.d-id.com/default-presenter.jpg',
+    ttsProvider: process.env.D_ID_TTS_PROVIDER || 'microsoft',
+    voiceId: process.env.D_ID_VOICE_ID || 'en-US-JennyNeural',
   },
   
   session: {

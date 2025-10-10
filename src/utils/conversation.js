@@ -7,7 +7,15 @@ class ConversationManager {
     this.sessions = new Map();
     
     // Clean up expired sessions every 5 minutes
-    setInterval(() => this.cleanupExpiredSessions(), 5 * 60 * 1000);
+    this.cleanupInterval = setInterval(() => this.cleanupExpiredSessions(), 5 * 60 * 1000);
+  }
+  
+  // Method to clear the interval (for testing and cleanup)
+  clearInterval() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
   }
   
   createSession(userId, subject = 'general') {
@@ -81,4 +89,35 @@ class ConversationManager {
   }
 }
 
-module.exports = new ConversationManager();
+const conversationManager = new ConversationManager();
+
+// Add this to Jest setup/teardown
+if (process.env.NODE_ENV === 'test') {
+  // Clear interval immediately in test environment
+  conversationManager.clearInterval();
+}
+
+// Make sure to clean up when the process exits
+process.on('exit', () => {
+  conversationManager.clearInterval();
+});
+
+// Also handle SIGINT and SIGTERM
+process.on('SIGINT', () => {
+  conversationManager.clearInterval();
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  conversationManager.clearInterval();
+  process.exit(0);
+});
+
+// Export a function that can be called directly
+const clearIntervals = () => conversationManager.clearInterval();
+
+module.exports = {
+  ConversationManager,
+  default: conversationManager,
+  clearIntervals
+};

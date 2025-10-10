@@ -62,4 +62,7 @@ class LLMService {
   
 }
 
-module.exports = new LLMService();
+module.exports = {
+  LLMService,
+  default: new LLMService()
+};

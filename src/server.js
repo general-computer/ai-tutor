@@ -24,9 +24,13 @@ app.use(errorHandler);
 
 // Start server
 const PORT = config.port;
-app.listen(PORT, () => {
-  logger.info(`SAT Tutor server running on port ${PORT}`);
-  logger.info(`Environment: ${config.nodeEnv}`);
-});
+
+// Only start the server if this file is run directly
+if (require.main === module) {
+  app.listen(PORT, () => {
+    logger.info(`SAT Tutor server running on port ${PORT}`);
+    logger.info(`Environment: ${config.nodeEnv}`);
+  });
+}
 
 module.exports = app;
