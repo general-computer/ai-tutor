@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const tutorController = require('../controllers/tutor.controller');
 
+// Test LLM configuration ß
+router.post('/test/llm', tutorController.testLLM);
+
 // Generate Agora token for client
 router.post('/token', tutorController.generateToken);
 

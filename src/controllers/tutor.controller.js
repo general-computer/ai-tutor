@@ -102,6 +102,23 @@ class TutorController {
       next(error);
     }
   }
+  async testLLM(req, res, next) {
+    try {
+      const { message, subject } = req.body;
+      
+      const llmResponse = await llmService.generateResponse(
+        message || 'What is 2+2?',
+        [],
+        subject || 'math'
+      );
+      
+      res.json({ 
+        response: llmResponse,
+        message: 'LLM working correctly'
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
-
 module.exports = new TutorController();
